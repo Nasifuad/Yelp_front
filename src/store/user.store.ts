@@ -6,29 +6,29 @@ type UserStore = {
 
   setUser: (user: string | null) => void;
   logout: () => void;
-  login: (formData: string) => Promise<void>;
-  signup: (formData: string) => Promise<void>;
+  login: (formData: object) => Promise<void>;
+  signup: (formData: object) => Promise<void>;
   getUser: () => Promise<Object>;
 };
 
 const useUserStore = create<UserStore>((set, get) => ({
-  user: null,
+  user: "Demo",
   isFetching: false,
   setUser: (user) => set({ user }),
 
   logout: () => set({ user: null }),
 
-  login: async (formData: string) => {
+  login: async (formData) => {
     try {
       set({
         isFetching: true,
       });
-      const response = await fetch("http://localhost:3000/api/login", {
+      const response = await fetch("http://localhost:3000/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ formData }),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
@@ -36,32 +36,33 @@ const useUserStore = create<UserStore>((set, get) => ({
       }
 
       const data = await response.json();
-      set({ user: data.user });
+      set({ user: data.user.userName });
     } catch (err) {
       console.error("Login error:", err);
     } finally {
       set({ isFetching: false });
     }
   },
-  signup: async (formData: string) => {
+  signup: async (formData) => {
     try {
       set({
         isFetching: true,
       });
-      const response = await fetch("http://localhost:3000/api/signup", {
+      const response = await fetch("http://localhost:3000/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ formData }),
+        body: JSON.stringify(formData),
       });
-
+      console.log("response from server", response);
       if (!response.ok) {
         throw new Error("SignUp failed");
       }
 
       const data = await response.json();
-      set({ user: data.user });
+      console.log("response data from server", data);
+      set({ user: data.user.userName });
     } catch (err) {
       console.error("Signup error:", err);
     } finally {
