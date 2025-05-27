@@ -12,7 +12,7 @@ type UserStore = {
   authenticate: () => Promise<void>;
 };
 
-const useUserStore = create<UserStore>((set, get) => ({
+const useUserStore = create<UserStore>((set) => ({
   user: "Demo",
   isFetching: false,
   setUser: (user) => set({ user }),
