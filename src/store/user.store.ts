@@ -9,6 +9,7 @@ type UserStore = {
   login: (formData: object) => Promise<void>;
   signup: (formData: object) => Promise<void>;
   getUser: () => Promise<Object>;
+  authenticate: () => Promise<void>;
 };
 
 const useUserStore = create<UserStore>((set, get) => ({
@@ -83,6 +84,22 @@ const useUserStore = create<UserStore>((set, get) => ({
       console.log("Error getting all users", error);
       return;
     }
+  },
+  authenticate: async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/auth/authenticate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("response from server as a authenticatior", response);
+      const data = await response.json();
+      set({ user: data.user.userName });
+    } catch (error) {}
   },
 }));
 
