@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 
 const Layout = () => {
   return (
-    <div className="flex flex-col min-h-screen gap-20">
+    <div className="flex flex-col min-h-screen ">
       <Navbar />
       <Outlet />
     </div>
