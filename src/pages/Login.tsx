@@ -4,10 +4,10 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import useUserStore from "../store/user.store";
 import { Navigate } from "react-router-dom";
 const Login = () => {
-  const { user } = useUserStore();
+  const { user, login } = useUserStore();
 
-  {
-    user ? <Navigate to="/journal" /> : null;
+  if (user) {
+    return <Navigate to="/" />;
   }
   const [formData, setFormData] = useState({
     userName: "",
@@ -62,7 +62,7 @@ const Login = () => {
     e.preventDefault();
     if (validate()) {
       console.log("Login data:", formData);
-      // Add your login logic here
+      login(formData);
     }
   };
 
@@ -166,6 +166,7 @@ const Login = () => {
             <button
               type="submit"
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+              onClick={handleSubmit}
             >
               Sign in
             </button>

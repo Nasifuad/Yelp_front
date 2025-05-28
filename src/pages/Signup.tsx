@@ -4,10 +4,10 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import useUserStore from "../store/user.store";
 
 const Signup = () => {
-  const { user } = useUserStore();
+  const { user, signup } = useUserStore();
 
-  {
-    user ? <Navigate to="/journal" /> : null;
+  if (user) {
+    return <Navigate to="/" />;
   }
   const [formData, setFormData] = useState({
     userName: "",
@@ -73,7 +73,7 @@ const Signup = () => {
     e.preventDefault();
     if (validate()) {
       console.log("Signup data:", formData);
-      // Add your signup logic here
+      signup(formData);
     }
   };
 
@@ -179,6 +179,7 @@ const Signup = () => {
             <button
               type="submit"
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+              onClick={handleSubmit}
             >
               Create account
             </button>
