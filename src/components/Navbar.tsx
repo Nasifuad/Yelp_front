@@ -69,10 +69,8 @@ const Navbar: React.FC = () => {
             >
               {user ? (
                 <>
-                  <div className="h-9 w-9 rounded-full bg-indigo-600 flex items-center justify-center text-white font-medium text-sm">
-                    {user?.[0]?.toUpperCase() || (
-                      <UserCircleIcon className="h-5 w-5" />
-                    )}
+                  <div className=" bg-indigo-600 p-2 rounded-sm flex items-center justify-center text-white font-medium text-sm">
+                    {user || <UserCircleIcon className="h-5 w-5" />}
                   </div>
                   <ChevronDownIcon className="h-4 w-4 text-gray-500 group-hover:text-gray-700 transition-colors" />
                 </>

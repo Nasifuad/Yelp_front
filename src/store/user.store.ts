@@ -1,5 +1,5 @@
 import { create } from "zustand";
-
+const API_URL = "https://yelp-khoh.onrender.com";
 type UserStore = {
   user: string | null;
   isFetching: boolean;
@@ -7,11 +7,10 @@ type UserStore = {
   setUser: (user: string | null) => void;
   logout: () => void;
   login: (formData: object) => Promise<void>;
-  signup: (formData: object) => Promise<void>;
+  signup: (formData: object) => Promise<boolean>;
   getUser: () => Promise<Object>;
   authenticate: () => Promise<void>;
 };
-
 const useUserStore = create<UserStore>((set) => ({
   user: null,
   isFetching: false,
@@ -24,7 +23,7 @@ const useUserStore = create<UserStore>((set) => ({
       set({
         isFetching: true,
       });
-      const response = await fetch("http://localhost:3000/api/auth/login", {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -46,10 +45,11 @@ const useUserStore = create<UserStore>((set) => ({
   },
   signup: async (formData) => {
     try {
+      console.log(API_URL);
       set({
         isFetching: true,
       });
-      const response = await fetch("http://localhost:3000/api/auth/signup", {
+      const response = await fetch(`${API_URL}/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,14 +66,16 @@ const useUserStore = create<UserStore>((set) => ({
       set({ user: data.user.userName });
     } catch (err) {
       console.error("Signup error:", err);
+      return false;
     } finally {
       set({ isFetching: false });
+      return true;
     }
   },
 
   getUser: async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/signup", {
+      const response = await fetch(`${API_URL}/api/auth/user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,15 +89,12 @@ const useUserStore = create<UserStore>((set) => ({
   },
   authenticate: async () => {
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/auth/authenticate",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/api/auth/authenticate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       console.log("response from server as a authenticatior", response);
       const data = await response.json();
       set({ user: data.user.userName });

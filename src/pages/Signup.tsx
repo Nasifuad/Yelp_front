@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import useUserStore from "../store/user.store";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const { user, signup } = useUserStore();
 
   if (user) {
-    return <Navigate to="/" />;
+    return navigate("/");
   }
   const [formData, setFormData] = useState({
     userName: "",
@@ -69,11 +70,14 @@ const Signup = () => {
     return valid;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
       console.log("Signup data:", formData);
-      signup(formData);
+      const success = await signup(formData);
+      if (success) {
+        navigate("/");
+      }
     }
   };
 
